@@ -1,5 +1,6 @@
 public class Main {
     public static void main(String[] args) {
-        //TODO: CREATE BOARD OBJECT
+        Board board = new Board(8);
+        System.out.println(board);
     }
 }
