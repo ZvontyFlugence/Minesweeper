@@ -1,7 +1,7 @@
 import static java.util.Arrays.deepToString;
 
 public class Board {
-    private Object[][] map;
+    private static Object[][] map;
 
     public Board(int size) {
         map = new Object[size][size];
@@ -22,7 +22,7 @@ public class Board {
             int row = (int)(Math.random() * map.length);
             int col = (int)(Math.random() * map.length);
             if(!isMine(map[row][col])) {
-                map[row][col] = new Mine();
+                map[row][col] = new Mine(true, new Position(row, col));
                 mines++;
             }
         }
@@ -90,6 +90,14 @@ public class Board {
 
     public boolean isMine(Object object) {
         return ("" + object.getClass()).equals("class Mine");
+    }
+
+    public int size() {
+        return map.length;
+    }
+
+    public Object[][] getBoard() {
+        return map;
     }
 
     public String toString() {
