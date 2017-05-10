@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 import static java.util.Arrays.deepToString;
 
 public class Board {
@@ -46,6 +48,14 @@ public class Board {
         if(r == 0 && c == 0) {
             if(isMine(map[r+1][c])) sum++; //Bottom
             if(isMine(map[r+1][c+1])) sum++; //Bottom Right
+            if(isMine(map[r][c+1])) sum++; //Right
+        } else if(r == 0 && c == map[r].length-1) {
+            if(isMine(map[r][c-1])) sum++; //Left
+            if(isMine(map[r+1][c-1])) sum++; //Bottom Left
+            if(isMine(map[r+1][c])) sum++; //Bottom
+        } else if(r == map.length-1 && c == 0) {
+            if(isMine(map[r-1][c])) sum++; //Top
+            if(isMine(map[r-1][c+1])) sum++; //Top Right
             if(isMine(map[r][c+1])) sum++; //Right
         } else if(r == map.length-1 && c == map[r].length-1) {
             if(isMine(map[r-1][c])) sum++; //Top
@@ -100,7 +110,16 @@ public class Board {
         return map;
     }
 
+    public Object get(Position pos) {
+        return map[pos.getRow()][pos.getColumn()];
+    }
+
     public String toString() {
-        return deepToString(map);
+        String res = "";
+        for(Object[] rows : map) {
+            res += Arrays.toString(rows) + "\n";
+        }
+        return res;
+        //return deepToString(map);
     }
 }

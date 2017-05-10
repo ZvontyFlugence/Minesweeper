@@ -14,4 +14,8 @@ public class Mine {
     public Position getPos() {
         return pos;
     }
+
+    public String toString() {
+        return "*";
+    }
 }
