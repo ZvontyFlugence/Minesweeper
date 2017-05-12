@@ -1,12 +1,12 @@
 import java.util.Arrays;
 
-import static java.util.Arrays.deepToString;
+//import static java.util.Arrays.deepToString;
 
 public class Board {
-    private static Object[][] map;
+    private static BoardItem[][] map;
 
     public Board(int size) {
-        map = new Object[size][size];
+        map = new BoardItem[size][size];
         randomize();
     }
 
@@ -16,14 +16,14 @@ public class Board {
 
         for(int i=0; i<map.length; i++) {
             for(int j=0; j<map[i].length; j++) {
-                map[i][j] = new Integer(0);
+                map[i][j] = new Count(0, new Position(i, j));
             }
         }
 
         while(mines < limit) {
             int row = (int)(Math.random() * map.length);
             int col = (int)(Math.random() * map.length);
-            if(!isMine(map[row][col])) {
+            if(!map[row][col].isMine()) {
                 map[row][col] = new Mine(true, new Position(row, col));
                 mines++;
             }
@@ -35,9 +35,9 @@ public class Board {
         for(int i=0; i<map.length; i++) {
             for(int j=0; j<map[i].length; j++) {
                 int sum;
-                if(!isMine(map[i][j])) {
+                if(!map[i][j].isMine()) {
                     sum = findMines(i, j);
-                    map[i][j] = new Integer(sum);
+                    map[i][j] = new Count(sum, new Position(i, j));
                 }
             }
         }
@@ -45,72 +45,69 @@ public class Board {
 
     private int findMines(int r, int c) {
         int sum = 0;
+
         if(r == 0 && c == 0) {
-            if(isMine(map[r+1][c])) sum++; //Bottom
-            if(isMine(map[r+1][c+1])) sum++; //Bottom Right
-            if(isMine(map[r][c+1])) sum++; //Right
+            if(map[r+1][c].isMine()) sum++; //Bottom
+            if(map[r+1][c+1].isMine()) sum++; //Bottom Right
+            if(map[r][c+1].isMine()) sum++; //Right
         } else if(r == 0 && c == map[r].length-1) {
-            if(isMine(map[r][c-1])) sum++; //Left
-            if(isMine(map[r+1][c-1])) sum++; //Bottom Left
-            if(isMine(map[r+1][c])) sum++; //Bottom
+            if(map[r][c-1].isMine()) sum++; //Left
+            if(map[r+1][c-1].isMine()) sum++; //Bottom Left
+            if(map[r+1][c].isMine()) sum++; //Bottom
         } else if(r == map.length-1 && c == 0) {
-            if(isMine(map[r-1][c])) sum++; //Top
-            if(isMine(map[r-1][c+1])) sum++; //Top Right
-            if(isMine(map[r][c+1])) sum++; //Right
+            if(map[r-1][c].isMine()) sum++; //Top
+            if(map[r-1][c+1].isMine()) sum++; //Top Right
+            if(map[r][c+1].isMine()) sum++; //Right
         } else if(r == map.length-1 && c == map[r].length-1) {
-            if(isMine(map[r-1][c])) sum++; //Top
-            if(isMine(map[r-1][c-1])) sum++; //Top Left
-            if(isMine(map[r][c-1])) sum++; //Left
+            if(map[r-1][c].isMine()) sum++; //Top
+            if(map[r-1][c-1].isMine()) sum++; //Top Left
+            if(map[r][c-1].isMine()) sum++; //Left
         } else if(r == 0 && c > 0 && c < map[r].length-1) {
-            if(isMine(map[r][c-1])) sum++; //Left
-            if(isMine(map[r+1][c-1])) sum++; //Bottom Left
-            if(isMine(map[r+1][c])) sum++; //Bottom
-            if(isMine(map[r+1][c+1])) sum++; //Bottom Right
-            if(isMine(map[r][c+1])) sum++; //Right
+            if(map[r][c-1].isMine()) sum++; //Left
+            if(map[r+1][c-1].isMine()) sum++; //Bottom Left
+            if(map[r+1][c].isMine()) sum++; //Bottom
+            if(map[r+1][c+1].isMine()) sum++; //Bottom Right
+            if(map[r][c+1].isMine()) sum++; //Right
         } else if(c == 0 && r > 0 && r < map.length-1) {
-            if(isMine(map[r+1][c])) sum++; //Bottom
-            if(isMine(map[r+1][c+1])) sum++; //Bottom Right
-            if(isMine(map[r][c+1])) sum++; //Right
-            if(isMine(map[r-1][c+1])) sum++; //Top Right
-            if(isMine(map[r-1][c])) sum++; //Top
+            if(map[r+1][c].isMine()) sum++; //Bottom
+            if(map[r+1][c+1].isMine()) sum++; //Bottom Right
+            if(map[r][c+1].isMine()) sum++; //Right
+            if(map[r-1][c+1].isMine()) sum++; //Top Right
+            if(map[r-1][c].isMine()) sum++; //Top
         } else if(r == map.length-1 && c > 0 && c < map[r].length-1) {
-            if(isMine(map[r][c-1])) sum++; //Left
-            if(isMine(map[r-1][c-1])) sum++; //Top Left
-            if(isMine(map[r-1][c])) sum++; //Top
-            if(isMine(map[r-1][c+1])) sum++; //Top Right
-            if(isMine(map[r][c+1])) sum++; //Right
+            if(map[r][c-1].isMine()) sum++; //Left
+            if(map[r-1][c-1].isMine()) sum++; //Top Left
+            if(map[r-1][c].isMine()) sum++; //Top
+            if(map[r-1][c+1].isMine()) sum++; //Top Right
+            if(map[r][c+1].isMine()) sum++; //Right
         } else if(c == map[r].length-1 && r > 0) {
-            if(isMine(map[r+1][c])) sum++; //Bottom
-            if(isMine(map[r+1][c-1])) sum++; //Bottom Left
-            if(isMine(map[r][c-1])) sum++; //Left
-            if(isMine(map[r-1][c-1])) sum++; //Top Left
-            if(isMine(map[r-1][c])) sum++; //Top
+            if(map[r+1][c].isMine()) sum++; //Bottom
+            if(map[r+1][c-1].isMine()) sum++; //Bottom Left
+            if(map[r][c-1].isMine()) sum++; //Left
+            if(map[r-1][c-1].isMine()) sum++; //Top Left
+            if(map[r-1][c].isMine()) sum++; //Top
         } else if(r > 0 && r < map.length-1 && c > 0 && c < map[r].length-1){
-            if(isMine(map[r-1][c])) sum++; //Top
-            if(isMine(map[r-1][c-1])) sum++; //Top Left
-            if(isMine(map[r][c-1])) sum++; //Left
-            if(isMine(map[r+1][c-1])) sum++; //Bottom Left
-            if(isMine(map[r+1][c])) sum++; //Bottom
-            if(isMine(map[r+1][c+1])) sum++; //Bottom Right
-            if(isMine(map[r][c+1])) sum++; //Right
-            if(isMine(map[r-1][c+1])) sum++; //Top Right
+            if(map[r-1][c].isMine()) sum++; //Top
+            if(map[r-1][c-1].isMine()) sum++; //Top Left
+            if(map[r][c-1].isMine()) sum++; //Left
+            if(map[r+1][c-1].isMine()) sum++; //Bottom Left
+            if(map[r+1][c].isMine()) sum++; //Bottom
+            if(map[r+1][c+1].isMine()) sum++; //Bottom Right
+            if(map[r][c+1].isMine()) sum++; //Right
+            if(map[r-1][c+1].isMine()) sum++; //Top Right
         }
         return sum;
-    }
-
-    public boolean isMine(Object object) {
-        return ("" + object.getClass()).equals("class Mine");
     }
 
     public int size() {
         return map.length;
     }
 
-    public Object[][] getBoard() {
+    public BoardItem[][] getBoard() {
         return map;
     }
 
-    public Object get(Position pos) {
+    public BoardItem get(Position pos) {
         return map[pos.getRow()][pos.getColumn()];
     }
 
@@ -120,6 +117,5 @@ public class Board {
             res += Arrays.toString(rows) + "\n";
         }
         return res;
-        //return deepToString(map);
     }
 }

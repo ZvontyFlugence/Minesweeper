@@ -42,8 +42,6 @@ public class Main {
             System.out.println(Arrays.toString(rows));
         }
 
-
-
         while(isAlive) {
             System.out.println("Enter an index position (row col):");
             int row = scan.nextInt();
