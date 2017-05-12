@@ -7,5 +7,4 @@ public class Mine extends BoardItem {
     public String toString() {
         return "*";
     }
-
 }

@@ -45,6 +45,7 @@ public class Board {
 
     private int findMines(int r, int c) {
         int sum = 0;
+
         if(r == 0 && c == 0) {
             if(map[r+1][c].isMine()) sum++; //Bottom
             if(map[r+1][c+1].isMine()) sum++; //Bottom Right
