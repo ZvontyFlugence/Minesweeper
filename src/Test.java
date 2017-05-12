@@ -1,43 +1,57 @@
+import java.util.ArrayList;
 import java.util.Arrays;
 
-//import static java.util.Arrays.deepToString;
+public class Test {
+    private BoardItem[][] map;
 
-public class Board {
-    private static BoardItem[][] map;
-
-    public Board(int size) {
-        map = new BoardItem[size][size];
-        randomize();
+    public Test(int size) {
+      this.map = new BoardItem[size][size];
     }
 
-    private void randomize() {
-        int limit = (int) (Math.pow(map.length, 2) * 0.16);
+    public void firstGen(Position pos) {
+        int r = pos.getRow();
+        int c = pos.getColumn();
+        //List of all invalid positions for mines
+        ArrayList mapList = new ArrayList<BoardItem>();
+        map[r-1][c-1] = new Count(0, new Position(r-1, c-1)); //Top Left
+        mapList.add(map[r-1][c-1]);
+        map[r-1][c] = new Count(0, new Position(r-1, c)); //Top
+        mapList.add(map[r-1][c]);
+        map[r-1][c+1] = new Count(0, new Position(r-1, c+1)); //Top Right
+        mapList.add(map[r-1][c+1]);
+        map[r][c+1] = new Count(0, new Position(r, c+1)); //Right
+        mapList.add(map[r][c+1]);
+        map[r+1][c+1] = new Count(0, new Position(r+1, c+1)); //Bottom Right
+        mapList.add(map[r+1][c+1]);
+        map[r+1][c] = new Count(0, new Position(r+1, c)); //Bottom
+        mapList.add(map[r+1][c]);
+        map[r+1][c-1] = new Count(0, new Position(r+1, c-1)); //Bottom Left
+        mapList.add(map[r+1][c-1]);
+        map[r][c-1] = new Count(0, new Position(r, c-1)); //Left
+        mapList.add(map[r][c-1]);
+
+        int row = (int)(Math.random()*map.length);
+        int col = (int)(Math.random()*map.length);
         int mines = 0;
-
-        for(int i=0; i<map.length; i++) {
-            for(int j=0; j<map[i].length; j++) {
-                map[i][j] = new Count(0, new Position(i, j));
-            }
+        int limit = (int)(Math.pow(map.length, 2) * 0.16);
+        //Continuously generate positions until it is not equal to the first clicked point
+        while(row == pos.getRow() && col == pos.getColumn()) {
+            row = (int)(Math.random()*map.length);
+            col = (int)(Math.random()*map.length);
         }
-
+        //Set mines at random valid positions
         while(mines < limit) {
-            int row = (int)(Math.random() * map.length);
-            int col = (int)(Math.random() * map.length);
-            if(!map[row][col].isMine()) {
-                map[row][col] = new Mine(true, new Position(row, col));
-                mines++;
+            //Making sure none of the 8 invalid positions are used when generating mines
+            if(!mapList.contains(map[row][col])) {
+              map[row][col] = new Mine(true, new Position(row, col));
             }
         }
-        calculateValues();
-    }
 
-    private void calculateValues() {
-        for(int i=0; i<map.length; i++) {
-            for(int j=0; j<map[i].length; j++) {
-                int sum;
-                if(!map[i][j].isMine()) {
-                    sum = findMines(i, j);
-                    map[i][j] = new Count(sum, new Position(i, j));
+        for(BoardItem[] itemRow : map) {
+            for(BoardItem item : itemRow) {
+                if(!item.isMine()) {
+                    item = new Count(findMines(item.getPos().getRow(),
+                            item.getPos().getColumn()), item.getPos());
                 }
             }
         }
@@ -112,10 +126,9 @@ public class Board {
 
     public String toString() {
         String res = "";
-        for(Object[] rows : map) {
+        for (Object[] rows : map) {
             res += Arrays.toString(rows) + "\n";
         }
         return res;
-        //return deepToString(map);
     }
 }
