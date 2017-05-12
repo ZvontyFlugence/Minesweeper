@@ -95,6 +95,7 @@ public class MainTest {
                 for(Object[] rows : map) {
                     System.out.println(Arrays.toString(rows));
                 }
+
             } else {
                 System.out.println("That is not a valid choice");
             }

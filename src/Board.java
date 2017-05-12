@@ -116,6 +116,5 @@ public class Board {
             res += Arrays.toString(rows) + "\n";
         }
         return res;
-        //return deepToString(map);
     }
 }

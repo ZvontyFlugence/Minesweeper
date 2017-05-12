@@ -24,4 +24,5 @@ public class BoardItem {
     public Position getPos() {
         return pos;
     }
+
 }

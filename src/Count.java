@@ -4,5 +4,4 @@ public class Count extends BoardItem {
         super(value, pos);
     }
 
-
 }

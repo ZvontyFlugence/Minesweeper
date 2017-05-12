@@ -34,11 +34,13 @@ public class Test {
         int col = (int)(Math.random()*map.length);
         int mines = 0;
         int limit = (int)(Math.pow(map.length, 2) * 0.16);
+
         //Continuously generate positions until it is not equal to the first clicked point
         while(row == pos.getRow() && col == pos.getColumn()) {
             row = (int)(Math.random()*map.length);
             col = (int)(Math.random()*map.length);
         }
+
         //Set mines at random valid positions
         while(mines < limit) {
             //Making sure none of the 8 invalid positions are used when generating mines
