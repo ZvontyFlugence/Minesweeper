@@ -39,9 +39,13 @@ public class Main {
                 map[i][j] = "?";
             }
         }
-
+        int counter = 0;
+        for (int i=0; i<size; i++)
+            System.out.print("  " + i);
+        System.out.println("");
         for(Object[] rows : map) {
-            System.out.println(Arrays.toString(rows));
+            System.out.println("" + counter + Arrays.toString(rows));
+            counter++;
         }
 
         int correct = 0;
@@ -154,17 +158,39 @@ public class Main {
                     if(correct == (int)(Math.pow(board.size(), 2) * 0.16)) {
                         System.out.println("Congrats you won!");
                         isAlive = false;
+                        for (int i=0; i<size; i++)
+                            System.out.print("  " + i);
+                        System.out.println("");
+                        counter = 0;
+                        for(Object[] rows : map) {
+                            System.out.println("" + counter + Arrays.toString(rows));
+                            counter++;
+                        }
+                        break;
+                    }
+                    for (int i=0; i<size; i++)
+                        System.out.print("  " + i);
+                    System.out.println("");
+                    counter = 0;
+                    for(Object[] rows : map) {
+                        System.out.println("" + counter + Arrays.toString(rows));
+                        counter++;
                     }
 
-                    for(Object[] rows : map) {
-                        System.out.println(Arrays.toString(rows));
-                    }
                 } else {
-                    System.out.println(board.getBoard().toString());
+                    counter = 0;
+                    for (int i=0; i<size; i++)
+                        System.out.print("  " + i);
+                    System.out.println("");
+                    for(Object[] rows : board.getBoard()) {
+                        System.out.println("" + counter + Arrays.toString(rows));
+                        counter++;
+                    }
                     System.out.println("Sorry, that was a mine!");
                     isAlive = guess;
                 }
-            } else if(choice.equals("mark")) {
+            }
+            else if(choice.equals("mark")) {
                 boolean isCorrect = mark(board, map, new Position(row, col));
 
                 if(isCorrect) correct++;
@@ -172,13 +198,19 @@ public class Main {
                     System.out.println("Congrats you won!");
                     isAlive = false;
                 }
-
+                counter=0;
+                for (int i=0; i<size; i++)
+                    System.out.print("  " + i);
+                System.out.println("");
                 for(Object[] rows : map) {
-                    System.out.println(Arrays.toString(rows));
+                    System.out.println("" + counter + Arrays.toString(rows));
+                    counter++;
                 }
-            } else {
+            }
+            else {
                 System.out.println("That is not a valid choice");
             }
         }
+        scan.close();
     }
 }
