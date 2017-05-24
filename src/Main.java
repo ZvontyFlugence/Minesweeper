@@ -25,11 +25,13 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        Board board = new Board(8);
-        //System.out.println(board);
-
         boolean isAlive = true;
         Scanner scan = new Scanner(System.in);
+
+        System.out.println("Please enter your desired board size: ");
+        int size = scan.nextInt();
+        Board board = new Board(size);
+
 
         Object[][] map = new Object[board.size()][board.size()];
         for(int i=0; i<map.length; i++) {
@@ -42,6 +44,7 @@ public class Main {
             System.out.println(Arrays.toString(rows));
         }
 
+        int correct = 0;
         while(isAlive) {
             System.out.println("Enter an index position (row col):");
             int row = scan.nextInt();
@@ -49,15 +52,115 @@ public class Main {
             scan.nextLine();
             System.out.println("Enter 'select' or 'mark':");
             String choice = scan.nextLine();
-            int correct = 0;
             if(choice.equals("select")) {
                 boolean guess = select(board, new Position(row, col));
                 if(guess) {
                     map[row][col] = board.get(new Position(row, col));
+
+                    if(map[row][col].equals(0)) {
+                        if(row == 0 && col == 0) {
+                            if(map[row+1][col].equals(0)) //Bottom
+                                map[row+1][col] = board.get(new Position(row+1, col));
+                            if(map[row+1][col+1].equals(0)) //Bottom Right
+                                map[row+1][col+1] = board.get(new Position(row+1, col+1));
+                            if(map[row][col+1].equals(0)) //Right
+                                map[row][col+1] = board.get(new Position(row, col+1));
+                        } else if(row == 0 && col == map[row].length-1) {
+                            if(map[row][col-1].equals(0)) //Left
+                                map[row][col-1] = board.get(new Position(row, col-1));
+                            if(map[row+1][col-1].equals(0)) //Bottom Left
+                                map[row+1][col-1] = board.get(new Position(row+1, col-1));
+                            if(map[row+1][col].equals(0)) //Bottom
+                                map[row+1][col] = board.get(new Position(row+1, col));
+                        } else if(row == map.length-1 && col == 0) {
+                            if(map[row-1][col].equals(0)) //Top
+                                map[row-1][col] = board.get(new Position(row-1, col));
+                            if(map[row-1][col+1].equals(0)) //Top Right
+                                map[row-1][col+1] = board.get(new Position(row-1, col+1));
+                            if(map[row][col+1].equals(0)) //Right
+                                map[row][col+1] = board.get(new Position(row, col+1));
+                        } else if(row == map.length-1 && col == map[row].length-1) {
+                            if(map[row-1][col].equals(0)) //Top
+                                map[row-1][col] = board.get(new Position(row-1, col));
+                            if(map[row-1][col-1].equals(0)) //Top Left
+                                map[row-1][col-1] = board.get(new Position(row-1, col-1));
+                            if(map[row][col-1].equals(0)) //Left
+                                map[row][col-1] = board.get(new Position(row, col-1));
+                        } else if(row == 0 && col > 0 && col < map[row].length-1) {
+                            if(map[row][col-1].equals(0)) //Left
+                                map[row][col-1] = board.get(new Position(row, col-1));
+                            if(map[row+1][col-1].equals(0)) //Bottom Left
+                                map[row+1][col-1] = board.get(new Position(row+1, col-1));
+                            if(map[row+1][col].equals(0)) //Bottom\
+                                map[row+1][col] = board.get(new Position(row+1, col));
+                            if(map[row+1][col+1].equals(0)) //Bottom Right
+                                map[row+1][col+1] = board.get(new Position(row+1, col+1));
+                            if(map[row][col+1].equals(0)) //Right
+                                map[row][col+1] = board.get(new Position(row, col+1));
+                        } else if(col == 0 && row > 0 && row < map.length-1) {
+                            if(map[row+1][col].equals(0)) //Bottom
+                                map[row+1][col] = board.get(new Position(row+1, col));
+                            if(map[row+1][col+1].equals(0)) //Bottom Right
+                                map[row+1][col+1] = board.get(new Position(row+1, col+1));
+                            if(map[row][col+1].equals(0)) //Right
+                                map[row][col+1] = board.get(new Position(row, col+1));
+                            if(map[row-1][col+1].equals(0)) //Top Right
+                                map[row-1][col+1] = board.get(new Position(row-1, col+1));
+                            if(map[row-1][col].equals(0)) //Top
+                                map[row-1][col] = board.get(new Position(row-1, col));
+                        } else if(row == map.length-1 && col > 0 && col < map[row].length-1) {
+                            if(map[row][col-1].equals(0)) //Left
+                                map[row][col-1] = board.get(new Position(row, col-1));
+                            if(map[row-1][col-1].equals(0)) //Top Left
+                                map[row-1][col-1] = board.get(new Position(row-1, col-1));
+                            if(map[row-1][col].equals(0)) //Top
+                                map[row-1][col] = board.get(new Position(row-1, col));
+                            if(map[row-1][col+1].equals(0)) //Top Right
+                                map[row-1][col+1] = board.get(new Position(row-1, col+1));
+                            if(map[row][col+1].equals(0)) //Right
+                                map[row][col+1] = board.get(new Position(row, col+1));
+                        } else if(col == map[row].length-1 && row > 0) {
+                            if(map[row+1][col].equals(0)) //Bottom
+                                map[row+1][col] = board.get(new Position(row+1, col));
+                            if(map[row+1][col-1].equals(0)) //Bottom Left
+                                map[row+1][col-1] = board.get(new Position(row+1, col-1));
+                            if(map[row][col-1].equals(0)) //Left
+                                map[row][col-1] = board.get(new Position(row, col-1));
+                            if(map[row-1][col-1].equals(0)) //Top Left
+                                map[row-1][col-1] = board.get(new Position(row-1, col));
+                            if(map[row-1][col].equals(0)) //Top
+                                map[row-1][col] = board.get(new Position(row-1, col));
+                        } else {
+                            if(map[row-1][col].equals(0)) //Top
+                                map[row-1][col] = board.get(new Position(row-1, col));
+                            if(map[row-1][col-1].equals(0)) //Top Left
+                                map[row-1][col-1] = board.get(new Position(row-1, col));
+                            if(map[row][col-1].equals(0)) //Left
+                                map[row][col-1] = board.get(new Position(row, col-1));
+                            if(map[row+1][col-1].equals(0)) //Bottom Left
+                                map[row+1][col-1] = board.get(new Position(row+1, col-1));
+                            if(map[row+1][col].equals(0)) //Bottom
+                                map[row+1][col] = board.get(new Position(row+1, col));
+                            if(map[row+1][col+1].equals(0)) //Bottom Right
+                                map[row+1][col+1] = board.get(new Position(row+1, col+1));
+                            if(map[row][col+1].equals(0)) //Right
+                                map[row][col+1] = board.get(new Position(row, col+1));
+                            if(map[row-1][col+1].equals(0)) //Top Right
+                                map[row-1][col+1] = board.get(new Position(row-1, col+1));
+                        }
+                    }
+
+                    if(!guess) correct++;
+                    if(correct == (int)(Math.pow(board.size(), 2) * 0.16)) {
+                        System.out.println("Congrats you won!");
+                        isAlive = false;
+                    }
+
                     for(Object[] rows : map) {
                         System.out.println(Arrays.toString(rows));
                     }
                 } else {
+                    System.out.println(board.getBoard().toString());
                     System.out.println("Sorry, that was a mine!");
                     isAlive = guess;
                 }

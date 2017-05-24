@@ -103,17 +103,19 @@ public class Board {
         return map.length;
     }
 
+    //Returns copy of original board
     public BoardItem[][] getBoard() {
         return map;
     }
 
+    //Returns BoardItem at selected position
     public BoardItem get(Position pos) {
         return map[pos.getRow()][pos.getColumn()];
     }
 
     public String toString() {
         String res = "";
-        for(Object[] rows : map) {
+        for(BoardItem[] rows : map) {
             res += Arrays.toString(rows) + "\n";
         }
         return res;

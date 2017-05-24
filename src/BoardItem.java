@@ -17,6 +17,10 @@ public class BoardItem {
         return mine;
     }
 
+    public boolean equals(int i) {
+        return (value == i);
+    }
+
     public int getValue() {
         return value;
     }
